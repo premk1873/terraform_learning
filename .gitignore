@@ -1,0 +1,22 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+terraform.tfplan
+terraform.tfplan.*
+*.backup
+.terraformrc
+terraform.rc
+
+# SSH Keys - EC2 instances
+my_key
+my_key.pub
+*.pem
+*.ppk
+id_rsa*
+id_ed25519*
+*.key
+*.pub
