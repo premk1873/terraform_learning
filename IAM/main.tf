@@ -25,12 +25,37 @@ resource "aws_iam_access_key" "keys" {
   user     = aws_iam_user.users[each.key].name
 }
 
+resource "aws_iam_user_login_profile" "login_data" {
+  for_each = var.users
+  user = each.key
+  password_length = 8
+
+  lifecycle {
+    ignore_changes = [ 
+      password_length,
+      password_reset_required,
+      pgp_key,
+     ]
+  }
+}
+
 output "access_keys" {
   value = {
     for user, creds in aws_iam_access_key.keys :
     user => {
       access_key_id     = creds.id
       secret_access_key = creds.secret
+    }
+  }
+  sensitive = true
+}
+
+output "login_creds" {
+  value = {
+    for user, creds in aws_iam_user_login_profile.login_data :
+    user => {
+    id = creds.id
+    password = creds.password
     }
   }
   sensitive = true
