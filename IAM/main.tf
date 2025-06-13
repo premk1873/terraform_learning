@@ -8,7 +8,7 @@ variable "users" {
 
 resource "aws_iam_user" "users" {
   for_each = var.users
-  name = each.key
+  name     = each.key
 }
 
 resource "aws_iam_user_policy_attachment" "attachments" {
@@ -21,17 +21,17 @@ resource "aws_iam_user_policy_attachment" "attachments" {
 }
 
 resource "aws_iam_access_key" "keys" {
-    for_each = var.users
-  user = aws_iam_user.users[each.key].name
+  for_each = var.users
+  user     = aws_iam_user.users[each.key].name
 }
 
 output "access_keys" {
-    value = {
-        for user, creds in iaws_iam_access_key.keys :
-        user => {
-            access_key_id = creds.id  
-            secret_access_key = creds.secret
-        }
+  value = {
+    for user, creds in aws_iam_access_key.keys :
+    user => {
+      access_key_id     = creds.id
+      secret_access_key = creds.secret
     }
-    sensitive = true
+  }
+  sensitive = true
 }
